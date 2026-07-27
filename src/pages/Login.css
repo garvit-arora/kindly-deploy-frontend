@@ -17,7 +17,16 @@
   width: 100%;
   height: 100%;
 }
+.login-github-message {
+  margin: 0;
+  color: rgba(240, 249, 244, 0.68);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
 
+.github-button {
+  text-decoration: none;
+}
 .login-video {
   z-index: 0;
   object-fit: cover;

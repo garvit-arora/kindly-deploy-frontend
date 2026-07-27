@@ -1,5 +1,8 @@
+@import "tailwindcss";
+
 html {
   background: #141414;
+  color: aliceblue;
 }
 
 body {
@@ -12,4 +15,9 @@ body {
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+}
+
+.outfit{
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
 }
