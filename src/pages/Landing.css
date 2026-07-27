@@ -1,0 +1,273 @@
+:root {
+  --landing-background: #1a1a1a;
+  --landing-foreground: #f5f5f5;
+  --landing-primary: #1bea12;
+  --landing-muted: #999;
+  --landing-nav-button: #2e2e2e;
+  --landing-hero-background: #141414;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.landing-page {
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--landing-hero-background);
+  color: var(--landing-foreground);
+  font-family: 'Sora', sans-serif;
+}
+
+.landing-nav {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+}
+
+.landing-logo {
+  color: var(--landing-foreground);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.landing-links {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+}
+
+.landing-links a,
+.nav-cta {
+  color: var(--landing-muted);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.landing-links a:hover {
+  color: var(--landing-foreground);
+}
+
+.nav-cta {
+  display: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 0.5rem;
+  color: var(--landing-foreground);
+  background: var(--landing-nav-button);
+}
+
+.nav-cta:hover {
+  background: #3a3a3a;
+}
+
+.nav-cta:active,
+.hero-actions button:active,
+.hero-actions a:active {
+  transform: scale(0.97);
+}
+
+.landing-hero {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  align-items: flex-end;
+  overflow: hidden;
+  background: var(--landing-hero-background);
+}
+
+.spline-background,
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.spline-background {
+  z-index: 0;
+}
+
+.spline-scene {
+  width: 100%;
+  height: 100%;
+}
+
+.spline-fallback {
+  width: 100%;
+  height: 100%;
+  background: var(--landing-hero-background);
+}
+
+.hero-overlay {
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 90%;
+  padding: 8rem 1.5rem 2.5rem;
+  pointer-events: none;
+}
+
+.hero-title,
+.hero-subtitle,
+.hero-description,
+.hero-trust {
+  margin: 0;
+}
+
+.hero-title {
+  margin-bottom: 0.5rem;
+  color: var(--landing-foreground);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+}
+
+.hero-title span {
+  color: var(--landing-primary);
+}
+
+.hero-subtitle {
+  margin-bottom: 0.75rem;
+  color: rgba(245, 245, 245, 0.8);
+  font-size: clamp(1.125rem, 2.5vw, 1.875rem);
+  font-weight: 300;
+}
+
+.hero-description {
+  max-width: 46rem;
+  margin-bottom: 1rem;
+  color: var(--landing-muted);
+  font-size: clamp(0.875rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero-actions button,
+.hero-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border: 0;
+  border-radius: 0.125rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration: none;
+  transition: filter 180ms ease, transform 180ms ease;
+}
+
+.button-primary {
+  color: #0a0a0a;
+  background: var(--landing-primary);
+}
+
+.button-primary:hover {
+  filter: brightness(1.1);
+}
+
+.button-secondary {
+  color: var(--landing-background);
+  background: #fff;
+}
+
+.button-secondary:hover {
+  filter: brightness(0.9);
+}
+
+.hero-trust {
+  margin-top: 1rem;
+  color: rgba(153, 153, 153, 0.6);
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+.reveal {
+  opacity: 0;
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .landing-nav {
+    padding: 1.25rem 4rem;
+  }
+
+  .landing-links {
+    display: flex;
+  }
+
+  .nav-cta {
+    display: inline-flex;
+  }
+
+  .hero-content {
+    max-width: 42rem;
+    padding: 8rem 2.5rem 2.5rem;
+  }
+
+  .hero-title {
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-description {
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions button,
+  .hero-actions a {
+    padding: 1rem 2rem;
+  }
+
+  .hero-trust {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    animation: none;
+  }
+}
