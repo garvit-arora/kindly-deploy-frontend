@@ -7,7 +7,9 @@ import Projects from "./pages/Projects.jsx";
 import Blueprints from "./pages/Blueprints.jsx";
 import Deployments from "./pages/Deployments.jsx";
 import NewProject from "./pages/NewProject.jsx";
-
+import Preview from "./pages/Preview.jsx";
+import LogStream from "./pages/LogStream.jsx";
+import ProjectDeployments from "./pages/ProjectDeployments.jsx";
 function App() {
   return (
     <div className="outfit">
@@ -17,10 +19,17 @@ function App() {
           {/* <Route path="/" element={<Navigate to="/projects" replace />} /> */}
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<Navigate to="projects" replace />} />
+            <Route path="logs" element={<LogStream />} />
             <Route path="projects" element={<Projects />} />
+            <Route
+              path="projects/:projectId/deployments"
+              element={<ProjectDeployments />}
+            />
             <Route path="projects/new" element={<NewProject />} />
             <Route path="blueprints" element={<Blueprints />} />
             <Route path="deployments" element={<Deployments />} />
+
+            <Route path="deployments/:deploymentId" element={<Preview />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" replace />} />

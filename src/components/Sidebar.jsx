@@ -55,8 +55,8 @@ const navItems = [
 
 export default function Sidebar({user}) {
   return (
-    <aside className="flex w-64 min-h-screen border-r bg-[#141414]">
-      <div className="flex flex-col justify-between">
+    <aside className="sticky top-0 flex h-screen w-64 shrink-0 border-r bg-[#141414]">
+      <div className="flex h-full w-full flex-col justify-between">
         <div className="flex w-full flex-col gap-6 p-4">
           <div className="flex flex-row gap-2">
             <img src={logo} className="h-14 w-14 object-contain" alt="Logo" />
