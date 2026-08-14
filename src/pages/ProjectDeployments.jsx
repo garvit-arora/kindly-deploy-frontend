@@ -11,48 +11,7 @@ const statusClasses = {
   FAILED: "bg-red-500/15 text-red-300",
   CANCELLED: "bg-gray-500/15 text-gray-300",
 };
-async function handleStop(deploymentId) {
-  if (!window.confirm("Stop this superseded deployment container?")) {
-    return;
-  }
 
-  setError("");
-
-  try {
-    const response = await fetch(
-      `${API_URL}/api/projects/${projectId}/deployments/${deploymentId}/stop`,
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
-
-    if (response.status === 401) {
-      navigate("/login", { replace: true });
-      return;
-    }
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Could not stop the container.");
-    }
-
-    setProject((currentProject) => ({
-      ...currentProject,
-      deployments: currentProject.deployments.map((deployment) =>
-        deployment.id === data.deployment.id
-          ? {
-              ...deployment,
-              stoppedAt: data.deployment.stoppedAt,
-            }
-          : deployment,
-      ),
-    }));
-  } catch (requestError) {
-    setError(requestError.message);
-  }
-}
 function formatStatus(status) {
   return status.toLowerCase().replaceAll("_", " ");
 }
@@ -71,6 +30,8 @@ function ProjectDeployments() {
   const [project, setProject] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRollingBackId, setIsRollingBackId] = useState("");
+  const [isStoppingId, setIsStoppingId] = useState("");
+  const [stopDeploymentId, setStopDeploymentId] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -142,15 +103,13 @@ function ProjectDeployments() {
       setIsRollingBackId("");
     }
   }
-  async function handleStop(deploymentId) {
-    const shouldStop = window.confirm(
-      "Stop this old deployment container? You can still roll back by rebuilding it later.",
-    );
 
-    if (!shouldStop) {
+  async function handleStop(deploymentId) {
+    if (isStoppingId) {
       return;
     }
 
+    setIsStoppingId(deploymentId);
     setError("");
 
     try {
@@ -184,10 +143,15 @@ function ProjectDeployments() {
             : deployment,
         ),
       }));
+
+      setStopDeploymentId("");
     } catch (requestError) {
       setError(requestError.message);
+    } finally {
+      setIsStoppingId("");
     }
   }
+
   if (isLoading) {
     return <p className="text-gray-400">Loading project history...</p>;
   }
@@ -209,6 +173,10 @@ function ProjectDeployments() {
   if (!project) {
     return null;
   }
+
+  const stopDeployment = project.deployments.find(
+    (deployment) => deployment.id === stopDeploymentId,
+  );
 
   return (
     <section>
@@ -308,9 +276,12 @@ function ProjectDeployments() {
                       {deployment.supersededAt && !deployment.stoppedAt && (
                         <button
                           type="button"
-                          onClick={() => handleStop(deployment.id)}
-                          className="cursor-pointer rounded-md border border-red-500/60 px-3 py-1.5 text-xs font-semibold text-red-300 transition hover:bg-red-500/10">
-                          Stop container
+                          onClick={() => setStopDeploymentId(deployment.id)}
+                          disabled={Boolean(isStoppingId)}
+                          className="cursor-pointer rounded-md border border-red-500/60 px-3 py-1.5 text-xs font-semibold text-red-300 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50">
+                          {isStoppingId === deployment.id
+                            ? "Stopping..."
+                            : "Stop container"}
                         </button>
                       )}
 
@@ -325,6 +296,46 @@ function ProjectDeployments() {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {stopDeployment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-gray-800 bg-[#151515] p-6 shadow-2xl">
+            <p className="text-sm text-gray-400">Stop old container</p>
+
+            <h2 className="mt-2 text-xl font-semibold text-white">
+              Are you sure?
+            </h2>
+
+            <p className="mt-3 text-sm leading-6 text-gray-400">
+              This will stop the old Docker container for deployment{" "}
+              <span className="font-mono text-gray-200">
+                {stopDeployment.id.slice(0, 8)}
+              </span>
+              . You can still roll back later by rebuilding this deployment.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setStopDeploymentId("")}
+                disabled={Boolean(isStoppingId)}
+                className="cursor-pointer rounded-md border border-gray-700 px-4 py-2 text-sm font-semibold text-gray-300 transition hover:bg-[#222] disabled:cursor-not-allowed disabled:opacity-50">
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleStop(stopDeployment.id)}
+                disabled={Boolean(isStoppingId)}
+                className="cursor-pointer rounded-md border border-red-500/60 px-4 py-2 text-sm font-semibold text-red-300 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50">
+                {isStoppingId === stopDeployment.id
+                  ? "Stopping..."
+                  : "Stop container"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </section>
