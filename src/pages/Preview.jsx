@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useCallback, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Check,
   Circle,
@@ -9,28 +9,28 @@ import {
   MoveUpRightIcon,
   RotateCcw,
   X,
-} from 'lucide-react'
+} from "lucide-react";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 const statusClasses = {
-  PENDING: 'bg-amber-500/15 text-amber-300',
-  QUEUED: 'bg-blue-500/15 text-blue-300',
-  BUILDING: 'bg-violet-500/15 text-violet-300',
-  READY: 'bg-emerald-500/15 text-emerald-300',
-  FAILED: 'bg-red-500/15 text-red-300',
-  CANCELLED: 'bg-gray-500/15 text-gray-300',
-}
+  PENDING: "bg-amber-500/15 text-amber-300",
+  QUEUED: "bg-blue-500/15 text-blue-300",
+  BUILDING: "bg-violet-500/15 text-violet-300",
+  READY: "bg-emerald-500/15 text-emerald-300",
+  FAILED: "bg-red-500/15 text-red-300",
+  CANCELLED: "bg-gray-500/15 text-gray-300",
+};
 
 function formatStatus(status) {
-  return status.toLowerCase().replaceAll('_', ' ')
+  return status.toLowerCase().replaceAll("_", " ");
 }
 
 function formatDate(value) {
-  return new Intl.DateTimeFormat('en', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(new Date(value))
+  return new Intl.DateTimeFormat("en", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
 }
 
 function ActivityAvatar({ user }) {
@@ -38,55 +38,55 @@ function ActivityAvatar({ user }) {
     return (
       <img
         src={user.avatarUrl}
-        alt={user.name || 'User'}
+        alt={user.name || "User"}
         className="h-9 w-9 rounded-full object-cover"
       />
-    )
+    );
   }
 
   return (
     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#3b3b3b] text-white">
       <RotateCcw size={16} />
     </div>
-  )
+  );
 }
 
 function StepIcon({ state }) {
-  if (state === 'complete') {
+  if (state === "complete") {
     return (
       <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-black">
         <Check size={13} strokeWidth={3} />
       </span>
-    )
+    );
   }
 
-  if (state === 'active') {
+  if (state === "active") {
     return (
       <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-500 text-white">
         <LoaderCircle size={13} className="animate-spin" />
       </span>
-    )
+    );
   }
 
-  if (state === 'failed') {
+  if (state === "failed") {
     return (
       <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white">
         <X size={13} strokeWidth={3} />
       </span>
-    )
+    );
   }
 
-  return <Circle size={18} className="text-gray-600" />
+  return <Circle size={18} className="text-gray-600" />;
 }
 
 function getDeploymentSteps(status) {
   const steps = [
-    { key: 'created', label: 'Deployment created' },
-    { key: 'queued', label: 'Waiting for deployment worker' },
-    { key: 'build', label: 'Building Docker image' },
-    { key: 'start', label: 'Starting application container' },
-    { key: 'health', label: 'Running health check' },
-  ]
+    { key: "created", label: "Deployment created" },
+    { key: "queued", label: "Waiting for deployment worker" },
+    { key: "build", label: "Building Docker image" },
+    { key: "start", label: "Starting application container" },
+    { key: "health", label: "Running health check" },
+  ];
 
   const progressByStatus = {
     PENDING: 0,
@@ -95,165 +95,153 @@ function getDeploymentSteps(status) {
     READY: 5,
     FAILED: 2,
     CANCELLED: 0,
-  }
+  };
 
-  const completedSteps = progressByStatus[status] ?? 0
+  const completedSteps = progressByStatus[status] ?? 0;
 
   return steps.map((step, index) => {
-    if (status === 'FAILED' && index === completedSteps) {
+    if (status === "FAILED" && index === completedSteps) {
       return {
         ...step,
-        state: 'failed',
-        label: 'Deployment failed during Docker build',
-      }
+        state: "failed",
+        label: "Deployment failed during Docker build",
+      };
     }
 
     if (index < completedSteps) {
-      return { ...step, state: 'complete' }
+      return { ...step, state: "complete" };
     }
 
-    if (index === completedSteps && status === 'BUILDING') {
-      return { ...step, state: 'active' }
+    if (index === completedSteps && status === "BUILDING") {
+      return { ...step, state: "active" };
     }
 
-    return { ...step, state: 'pending' }
-  })
+    return { ...step, state: "pending" };
+  });
 }
 
 function Preview() {
-  const { deploymentId } = useParams()
-  const navigate = useNavigate()
+  const { deploymentId } = useParams();
+  const navigate = useNavigate();
 
-  const [deployment, setDeployment] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [isDeploymentOpen, setIsDeploymentOpen] = useState(false)
-  const [isRedeploying, setIsRedeploying] = useState(false)
-  const [buildLogs, setBuildLogs] = useState([])
-  const [isLoadingBuildLogs, setIsLoadingBuildLogs] = useState(false)
+  const [deployment, setDeployment] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isDeploymentOpen, setIsDeploymentOpen] = useState(false);
+  const [isRedeploying, setIsRedeploying] = useState(false);
+  const [buildLogs, setBuildLogs] = useState([]);
+  const [isLoadingBuildLogs, setIsLoadingBuildLogs] = useState(false);
 
   const loadDeployment = useCallback(async () => {
     try {
       const response = await fetch(
         `${API_URL}/api/deployments/${deploymentId}`,
         {
-          credentials: 'include',
+          credentials: "include",
         },
-      )
+      );
 
       if (response.status === 401) {
-        navigate('/login', { replace: true })
-        return
+        navigate("/login", { replace: true });
+        return;
       }
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Could not load deployment.')
+        throw new Error(data.message || "Could not load deployment.");
       }
 
-      setDeployment(data.deployment)
-      setError('')
+      setDeployment(data.deployment);
+      setError("");
     } catch (requestError) {
-      setError(requestError.message)
+      setError(requestError.message);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [deploymentId, navigate])
+  }, [deploymentId, navigate]);
+  
+    useEffect(() => {
+      loadDeployment();
+    }, [loadDeployment]);
+  const [streamKey, setStreamKey] = useState(0);
 
-  const loadBuildLogs = useCallback(async () => {
+  useEffect(() => {
     if (!deploymentId) {
-      return
+      return undefined;
     }
 
-    setIsLoadingBuildLogs(true)
+    setBuildLogs([]);
 
-    try {
-      const response = await fetch(
-        `${API_URL}/api/deployments/${deploymentId}/build-logs`,
-        {
-          credentials: 'include',
-        },
-      )
+    const eventSource = new EventSource(
+      `${API_URL}/api/deployments/${deploymentId}/logs/stream`,
+      { withCredentials: true },
+    );
 
-      if (response.status === 401) {
-        navigate('/login', { replace: true })
-        return
-      }
+    eventSource.onmessage = (event) => {
+      const log = JSON.parse(event.data);
+      setBuildLogs((currentLogs) => [...currentLogs, log]);
+    };
 
-      const data = await response.json()
+    eventSource.onerror = () => {
+      eventSource.close();
+    };
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Could not load build logs.')
-      }
-
-      setBuildLogs(data.logs)
-    } catch (requestError) {
-      setError(requestError.message)
-    } finally {
-      setIsLoadingBuildLogs(false)
-    }
-  }, [deploymentId, navigate])
+    return () => {
+      eventSource.close();
+    };
+  }, [deploymentId, streamKey]);
 
   useEffect(() => {
-    loadDeployment()
-  }, [loadDeployment])
-
-  useEffect(() => {
-    loadBuildLogs()
-  }, [loadBuildLogs])
-
-  useEffect(() => {
-    if (!['PENDING', 'QUEUED', 'BUILDING'].includes(deployment?.status)) {
-      return undefined
+    if (!["PENDING", "QUEUED", "BUILDING"].includes(deployment?.status)) {
+      return undefined;
     }
 
     const intervalId = window.setInterval(() => {
-      loadDeployment()
-      loadBuildLogs()
-    }, 3000)
+      loadDeployment();
+    }, 3000);
 
-    return () => window.clearInterval(intervalId)
-  }, [deployment?.status, loadDeployment, loadBuildLogs])
+    return () => window.clearInterval(intervalId);
+  }, [deployment?.status, loadDeployment]);
 
   async function handleRedeploy() {
     if (!deployment || isRedeploying) {
-      return
+      return;
     }
 
-    setIsRedeploying(true)
-    setError('')
+    setIsRedeploying(true);
+    setError("");
 
     try {
       const response = await fetch(
         `${API_URL}/api/projects/${deployment.project.id}/deployments`,
         {
-          method: 'POST',
-          credentials: 'include',
+          method: "POST",
+          credentials: "include",
         },
-      )
+      );
 
       if (response.status === 401) {
-        navigate('/login', { replace: true })
-        return
+        navigate("/login", { replace: true });
+        return;
       }
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Could not start redeployment.')
+        throw new Error(data.message || "Could not start redeployment.");
       }
 
-      navigate(`/dashboard/deployments/${data.deployment.id}`)
+      navigate(`/dashboard/deployments/${data.deployment.id}`);
     } catch (requestError) {
-      setError(requestError.message)
+      setError(requestError.message);
     } finally {
-      setIsRedeploying(false)
+      setIsRedeploying(false);
     }
   }
 
   if (isLoading) {
-    return <p className="p-8 text-gray-400">Loading deployment...</p>
+    return <p className="p-8 text-gray-400">Loading deployment...</p>;
   }
 
   if (error) {
@@ -261,31 +249,29 @@ function Preview() {
       <section className="p-8">
         <Link
           to="/dashboard/projects"
-          className="text-sm text-[#b875f4] hover:text-white"
-        >
+          className="text-sm text-[#b875f4] hover:text-white">
           ← Back to projects
         </Link>
 
         <p className="mt-6 text-red-400">{error}</p>
       </section>
-    )
+    );
   }
 
   if (!deployment) {
-    return null
+    return null;
   }
 
-  const { project, activities } = deployment
-  const deploymentSteps = getDeploymentSteps(deployment.status)
-  const triggerActivity = activities.at(-1)
-  const websiteUrl = deployment.publicUrl || deployment.localUrl
+  const { project, activities } = deployment;
+  const deploymentSteps = getDeploymentSteps(deployment.status);
+  const triggerActivity = activities.at(-1);
+  const websiteUrl = deployment.publicUrl || deployment.localUrl;
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-8">
       <Link
         to="/dashboard/projects"
-        className="cursor-pointer text-sm text-gray-500 transition hover:text-[#b875f4]"
-      >
+        className="cursor-pointer text-sm text-gray-500 transition hover:text-[#b875f4]">
         ← Back to projects
       </Link>
 
@@ -314,8 +300,7 @@ function Preview() {
             <span
               className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
                 statusClasses[deployment.status] || statusClasses.PENDING
-              }`}
-            >
+              }`}>
               {formatStatus(deployment.status)}
             </span>
           </div>
@@ -328,16 +313,15 @@ function Preview() {
               type="button"
               onClick={handleRedeploy}
               disabled={isRedeploying}
-              className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-gray-200 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-            >
+              className="inline-flex cursor-pointer items-center gap-1.5 font-medium text-gray-200 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-50">
               <RotateCcw size={16} />
-              {isRedeploying ? 'Starting...' : 'Redeploy'}
+              {isRedeploying ? "Starting..." : "Redeploy"}
             </button>
           </div>
 
           <div className="pt-3">
             <p className="text-gray-400">
-              {deployment.publicUrl ? 'Domain' : 'Local URL'}
+              {deployment.publicUrl ? "Domain" : "Local URL"}
             </p>
 
             {websiteUrl ? (
@@ -345,9 +329,8 @@ function Preview() {
                 href={websiteUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-1 flex w-fit cursor-pointer items-center gap-2 font-medium text-white transition hover:text-[#b875f4]"
-              >
-                {websiteUrl.replace(/^https?:\/\//, '')}
+                className="mt-1 flex w-fit cursor-pointer items-center gap-2 font-medium text-white transition hover:text-[#b875f4]">
+                {websiteUrl.replace(/^https?:\/\//, "")}
                 <MoveUpRightIcon size={16} />
               </a>
             ) : (
@@ -362,8 +345,7 @@ function Preview() {
               href={project.repositoryUrl}
               target="_blank"
               rel="noreferrer"
-              className="flex w-fit cursor-pointer items-center gap-2 font-medium text-gray-200 transition hover:text-[#b875f4]"
-            >
+              className="flex w-fit cursor-pointer items-center gap-2 font-medium text-gray-200 transition hover:text-[#b875f4]">
               <GitBranchIcon size={17} />
               {project.githubRepositoryFullName || project.repositoryUrl}
               <MoveUpRightIcon size={15} />
@@ -371,13 +353,13 @@ function Preview() {
           ) : (
             <p className="flex items-center gap-2 font-medium text-gray-200">
               <GitBranchIcon size={17} />
-              {project.githubRepositoryFullName || 'Repository'}
+              {project.githubRepositoryFullName || "Repository"}
             </p>
           )}
 
           <p className="flex items-center gap-2 text-gray-400">
             <GitBranch size={17} />
-            branch{' '}
+            branch{" "}
             <span className="font-semibold text-gray-200">
               {deployment.branch}
             </span>
@@ -393,16 +375,14 @@ function Preview() {
             <div className="mt-5 inline-flex rounded-xl bg-[#1c1c1c] p-1">
               <button
                 type="button"
-                className="cursor-pointer rounded-lg border border-[#444] bg-[#101010] px-4 py-1.5 text-sm font-semibold text-white"
-              >
+                className="cursor-pointer rounded-lg border border-[#444] bg-[#101010] px-4 py-1.5 text-sm font-semibold text-white">
                 Live
               </button>
 
               <button
                 type="button"
                 disabled
-                className="cursor-not-allowed px-4 py-1.5 text-sm font-semibold text-gray-500 disabled:opacity-50"
-              >
+                className="cursor-not-allowed px-4 py-1.5 text-sm font-semibold text-gray-500 disabled:opacity-50">
                 Previews
               </button>
             </div>
@@ -412,10 +392,9 @@ function Preview() {
             type="button"
             onClick={handleRedeploy}
             disabled={isRedeploying}
-            className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#444] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1c1c1c] disabled:cursor-not-allowed disabled:opacity-50"
-          >
+            className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#444] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1c1c1c] disabled:cursor-not-allowed disabled:opacity-50">
             <RotateCcw size={16} />
-            {isRedeploying ? 'Starting...' : 'Redeploy'}
+            {isRedeploying ? "Starting..." : "Redeploy"}
           </button>
         </div>
 
@@ -432,15 +411,14 @@ function Preview() {
             <tbody>
               <tr
                 onClick={() => setIsDeploymentOpen((isOpen) => !isOpen)}
-                className="cursor-pointer border-t border-[#292929] transition hover:bg-[#202020]"
-              >
+                className="cursor-pointer border-t border-[#292929] transition hover:bg-[#202020]">
                 <td className="px-6 py-5">
                   <div className="flex items-center gap-3">
                     <ActivityAvatar user={triggerActivity?.actorUser} />
 
                     <div>
                       <p className="font-semibold text-white">
-                        {triggerActivity?.actorUser?.name || 'Manual update'}
+                        {triggerActivity?.actorUser?.name || "Manual update"}
                       </p>
 
                       <p className="text-gray-500">
@@ -453,18 +431,16 @@ function Preview() {
                 <td className="px-6 py-5">
                   <span
                     className={`rounded-md px-2 py-1 text-xs font-semibold ${
-                      statusClasses[deployment.status] ||
-                      statusClasses.PENDING
-                    }`}
-                  >
+                      statusClasses[deployment.status] || statusClasses.PENDING
+                    }`}>
                     {formatStatus(deployment.status)}
                   </span>
                 </td>
 
                 <td className="px-6 py-5 text-gray-300">
-                  {deployment.status === 'QUEUED'
-                    ? 'Waiting for deployment worker'
-                    : triggerActivity?.message || 'Deployment update'}
+                  {deployment.status === "QUEUED"
+                    ? "Waiting for deployment worker"
+                    : triggerActivity?.message || "Deployment update"}
                 </td>
               </tr>
 
@@ -482,13 +458,12 @@ function Preview() {
                             const activityStatus =
                               activity.toStatus ||
                               activity.fromStatus ||
-                              deployment.status
+                              deployment.status;
 
                             return (
                               <div
                                 key={activity.id}
-                                className="flex items-center gap-3"
-                              >
+                                className="flex items-center gap-3">
                                 <StepIcon state="complete" />
 
                                 <div>
@@ -501,7 +476,7 @@ function Preview() {
                                   </p>
                                 </div>
                               </div>
-                            )
+                            );
                           })}
                         </div>
                       </div>
@@ -515,17 +490,15 @@ function Preview() {
                           {deploymentSteps.map((step) => (
                             <div
                               key={step.key}
-                              className="flex items-center gap-3"
-                            >
+                              className="flex items-center gap-3">
                               <StepIcon state={step.state} />
 
                               <span
                                 className={
-                                  step.state === 'pending'
-                                    ? 'text-gray-500'
-                                    : 'text-gray-200'
-                                }
-                              >
+                                  step.state === "pending"
+                                    ? "text-gray-500"
+                                    : "text-gray-200"
+                                }>
                                 {step.label}
                               </span>
                             </div>
@@ -552,22 +525,20 @@ function Preview() {
 
           <button
             type="button"
-            onClick={loadBuildLogs}
-            disabled={isLoadingBuildLogs}
-            className="cursor-pointer rounded-xl border border-[#444] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1c1c1c] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {isLoadingBuildLogs ? 'Loading...' : 'Refresh logs'}
+            onClick={() => setStreamKey((key) => key + 1)}
+            className="cursor-pointer rounded-xl border border-[#444] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1c1c1c]">
+            Reconnect
           </button>
         </div>
 
         <pre className="mt-5 max-h-125 overflow-auto rounded-2xl border border-gray-800 bg-[#111] p-5 font-mono text-xs leading-6 text-gray-300">
           {buildLogs.length > 0
-            ? buildLogs.map((log) => log.message).join('\n')
-            : 'No persisted build logs yet. Create a new deployment after enabling build-log storage.'}
+            ? buildLogs.map((log) => log.message).join("\n")
+            : "No persisted build logs yet. Create a new deployment after enabling build-log storage."}
         </pre>
       </div>
     </section>
-  )
+  );
 }
 
-export default Preview
+export default Preview;

@@ -10,6 +10,8 @@ import NewProject from "./pages/NewProject.jsx";
 import Preview from "./pages/Preview.jsx";
 import LogStream from "./pages/LogStream.jsx";
 import ProjectDeployments from "./pages/ProjectDeployments.jsx";
+import Overview from "./pages/Overview.jsx";
+import EnvironmentVariables from "./pages/EnvironmentVariables.jsx";
 function App() {
   return (
     <div className="outfit">
@@ -18,7 +20,8 @@ function App() {
           <Route path="/" element={<Landing />} />
           {/* <Route path="/" element={<Navigate to="/projects" replace />} /> */}
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<Navigate to="projects" replace />} />
+            <Route index element={<Navigate to="overview" replace />} />
+             <Route path="overview" element={<Overview />} />
             <Route path="logs" element={<LogStream />} />
             <Route path="projects" element={<Projects />} />
             <Route
@@ -27,6 +30,7 @@ function App() {
             />
             <Route path="projects/new" element={<NewProject />} />
             <Route path="blueprints" element={<Blueprints />} />
+            <Route path="environment-variables" element={<EnvironmentVariables />} />
             <Route path="deployments" element={<Deployments />} />
 
             <Route path="deployments/:deploymentId" element={<Preview />} />

@@ -1,21 +1,27 @@
 import { NavLink, Link } from "react-router-dom";
 import logo from "../../public/logo-wo-bg.png";
 import {
-  Folder,
-  Box,
-  Rocket,
-  Terminal,
-  KeyRound,
-  Globe,
-  Settings,
-  Boxes,
-  NotepadTextDashed,
-  BoxIcon,
-  List,
-  BookLock,
-} from "lucide-react";
+    Folder,
+    Box,
+    Rocket,
+    Terminal,
+    KeyRound,
+    Globe,
+    Settings,
+    Boxes,
+    NotepadTextDashed,
+    BoxIcon,
+    List,
+    BookLock,
+    LayoutDashboard,
+  } from "lucide-react";
 
 const navItems = [
+  {
+    name: "Overview",
+    path: "/dashboard/overview",
+    icon: LayoutDashboard,
+  },
   {
     name: "Projects",
     path: "/dashboard/projects",
