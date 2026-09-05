@@ -16,9 +16,9 @@ function Dashboard() {
                 if(!isMounted){
                     return
                 }
-                setStatus(response.ok?'Authenticated':'Unauthenticated');
                 if(!response.ok){
-                    setStatus("unauthorized")
+                    setStatus("unauthenticated")
+                    return
                 }
                 const data = await response.json()
                 setUser(data.user)
