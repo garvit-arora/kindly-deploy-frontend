@@ -12,6 +12,9 @@ import LogStream from "./pages/LogStream.jsx";
 import ProjectDeployments from "./pages/ProjectDeployments.jsx";
 import Overview from "./pages/Overview.jsx";
 import EnvironmentVariables from "./pages/EnvironmentVariables.jsx";
+import Domains from "./pages/Domains.jsx";
+import Settings from "./pages/Settings.jsx";
+import Profile from "./pages/Profile.jsx";
 function App() {
   return (
     <div className="outfit">
@@ -32,6 +35,9 @@ function App() {
             <Route path="blueprints" element={<Blueprints />} />
             <Route path="environment-variables" element={<EnvironmentVariables />} />
             <Route path="deployments" element={<Deployments />} />
+            <Route path="domains" element={<Domains />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="profile" element={<Profile />} />
 
             <Route path="deployments/:deploymentId" element={<Preview />} />
           </Route>

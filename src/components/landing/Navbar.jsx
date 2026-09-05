@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronRight, Menu } from 'lucide-react'
+import { ChevronRight, Menu } from 'lucide-react'
+import GithubMark from '../GithubMark'
 
 const PETAL_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
 
@@ -28,8 +29,8 @@ function Logo({ className }) {
 const NAV_ITEMS = [
   { label: 'Home', href: '#top', dot: true },
   { label: 'Features', href: '#features' },
-  { label: 'Docs', href: '#docs' },
-  { label: 'Platform', href: '#platform', accent: true },
+  { label: 'How it works', href: '#how' },
+  { label: 'Testimonials', href: '#testimonials', accent: true },
 ]
 
 function Navbar() {
@@ -56,13 +57,20 @@ function Navbar() {
                   <span className="inline-block w-[1.5px] h-[1.5px] rounded-full bg-black" />
                 ) : null}
                 {item.label}
-                {item.accent ? <ChevronDown className="w-3.5 h-3.5" /> : null}
               </a>
             ))}
           </nav>
 
           <div className="ml-auto flex items-center gap-3">
-            <BookOpen className="hidden sm:block w-5 h-5 text-neutral-700" aria-hidden="true" />
+            <a
+              href="https://github.com/garvit-arora"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden sm:block text-neutral-700 hover:text-neutral-900 transition"
+              aria-label="GitHub"
+            >
+              <GithubMark className="w-5 h-5" />
+            </a>
 
             <Link
               to="/login"
@@ -101,7 +109,6 @@ function Navbar() {
                 style={{ fontSize: 14 }}
               >
                 {item.label}
-                {item.accent ? <ChevronDown className="w-3.5 h-3.5" /> : null}
               </a>
             ))}
           </div>
