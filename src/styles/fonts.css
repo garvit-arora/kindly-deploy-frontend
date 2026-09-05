@@ -1,5 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
-html {
-  scroll-behavior: smooth;
+@keyframes kd-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes kd-pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.kd-orbit {
+  animation: kd-orbit-spin 26s linear infinite;
+}
+
+.kd-pulse {
+  animation: kd-pulse-dot 1.8s ease-in-out infinite;
+}
+
+.kd-step-surface {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+}
+
+.kd-step:hover .kd-step-surface {
+  transform: scale(1.06);
+  filter: saturate(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kd-orbit,
+  .kd-pulse {
+    animation: none;
+  }
+
+  .kd-step:hover .kd-step-surface {
+    transform: none;
+  }
 }
