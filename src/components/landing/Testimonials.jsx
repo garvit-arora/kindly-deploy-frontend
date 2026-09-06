@@ -5,7 +5,6 @@ const TESTIMONIALS = [
     name: 'Aarav Mehta',
     role: 'Indie developer',
     initials: 'AM',
-    blob: '-top-24 -left-20',
   },
   {
     quote:
@@ -13,8 +12,6 @@ const TESTIMONIALS = [
     name: 'Sara Lindqvist',
     role: 'Backend engineer',
     initials: 'SL',
-    featured: true,
-    blob: '-bottom-28 left-1/2 -translate-x-1/2',
   },
   {
     quote:
@@ -22,89 +19,137 @@ const TESTIMONIALS = [
     name: 'Daniel Okoye',
     role: 'Founding engineer',
     initials: 'DO',
-    blob: '-bottom-24 -right-20',
+  },
+  {
+    quote:
+      'The health check is the whole thing for me. A broken build simply never becomes the live container, so a bad merge is boring instead of scary.',
+    name: 'Priya Nair',
+    role: 'Platform engineer',
+    initials: 'PN',
+  },
+  {
+    quote:
+      'Builds run on a separate worker, so the dashboard stays responsive while a heavy image is compiling. That detail is easy to miss and hard to live without.',
+    name: 'Tomas Berg',
+    role: 'Infrastructure lead',
+    initials: 'TB',
+  },
+  {
+    quote:
+      'Setting it up took one screen: install the app, pick the repo, pick the branch. I had a live URL before my coffee finished.',
+    name: 'Meera Raghavan',
+    role: 'Full-stack developer',
+    initials: 'MR',
+  },
+  {
+    quote:
+      'Every status change is written down, so when something goes wrong I can read exactly what happened instead of guessing from memory.',
+    name: 'Luca Ferrari',
+    role: 'Site reliability engineer',
+    initials: 'LF',
+  },
+  {
+    quote:
+      'It builds the commit I pushed, not whatever happens to be on the branch when the worker gets around to it. That alone removed a class of bugs.',
+    name: 'Hannah Cole',
+    role: 'Senior engineer',
+    initials: 'HC',
+  },
+  {
+    quote:
+      'Our demo environments used to drift. Now every branch is just another deployment with its own hostname and nobody argues about ports.',
+    name: 'Kwame Asante',
+    role: 'Engineering manager',
+    initials: 'KA',
+  },
+  {
+    quote:
+      'I teach a systems course and use this to show what a deploy pipeline actually does. Nothing is hidden behind a black box.',
+    name: 'Nadia Rahman',
+    role: 'Lecturer',
+    initials: 'NR',
   },
 ]
 
+const ROW_ONE = TESTIMONIALS.slice(0, 5)
+const ROW_TWO = TESTIMONIALS.slice(5)
+
 function TestimonialCard({ item }) {
-  const featured = Boolean(item.featured)
-
   return (
-    <figure
-      className={`kd-step group relative rounded-2xl overflow-hidden p-6 sm:p-7 flex flex-col ${
-        featured
-          ? 'bg-[#0b0f1a] md:-mt-6 md:mb-6 border border-white/10'
-          : 'bg-white'
-      }`}
-    >
+    <figure className="w-[300px] sm:w-[360px] shrink-0 rounded-2xl bg-white border border-neutral-200/70 p-5 sm:p-6 flex flex-col">
       <span
-        className={`kd-step-surface absolute h-56 w-56 rounded-full bg-[#ef4d23] blur-3xl ${
-          featured ? 'opacity-[0.28]' : 'opacity-[0.13]'
-        } ${item.blob}`}
+        className="text-[#ef4d23]/35"
+        style={{
+          fontFamily: "'Instrument Serif', serif",
+          fontSize: 44,
+          lineHeight: 0.7,
+        }}
         aria-hidden="true"
-      />
+      >
+        &ldquo;
+      </span>
 
-      <div className="relative z-10 flex flex-col h-full">
+      <blockquote
+        className="mt-4 flex-1 text-neutral-700"
+        style={{ fontSize: 14, lineHeight: 1.7 }}
+      >
+        {item.quote}
+      </blockquote>
+
+      <figcaption className="mt-6 pt-5 border-t border-neutral-200 flex items-center gap-3">
         <span
-          className={featured ? 'text-white/35' : 'text-[#ef4d23]/40'}
-          style={{
-            fontFamily: "'Instrument Serif', serif",
-            fontSize: 56,
-            lineHeight: 0.7,
-          }}
-          aria-hidden="true"
+          className="grid place-items-center w-9 h-9 rounded-full bg-[#0b0f1a] text-white shrink-0"
+          style={{ fontSize: 12, fontWeight: 600 }}
         >
-          &ldquo;
+          {item.initials}
         </span>
 
-        <blockquote
-          className={`mt-5 flex-1 ${featured ? 'text-white/85' : 'text-neutral-800'}`}
-          style={{ fontSize: 15, lineHeight: 1.7 }}
-        >
-          {item.quote}
-        </blockquote>
-
-        <figcaption
-          className={`mt-7 pt-5 flex items-center gap-3 border-t ${
-            featured ? 'border-white/15' : 'border-neutral-200'
-          }`}
-        >
+        <span>
           <span
-            className={`grid place-items-center w-10 h-10 rounded-full ${
-              featured ? 'bg-white text-[#0b0f1a]' : 'bg-[#0b0f1a] text-white'
-            }`}
-            style={{ fontSize: 13, fontWeight: 600 }}
+            className="block text-neutral-900"
+            style={{ fontSize: 13.5, fontWeight: 600 }}
           >
-            {item.initials}
+            {item.name}
           </span>
-
-          <span>
-            <span
-              className={`block ${featured ? 'text-white' : 'text-neutral-900'}`}
-              style={{ fontSize: 14, fontWeight: 600 }}
-            >
-              {item.name}
-            </span>
-            <span
-              className={`block ${featured ? 'text-white/55' : 'text-neutral-500'}`}
-              style={{ fontSize: 12 }}
-            >
-              {item.role}
-            </span>
+          <span className="block text-neutral-500" style={{ fontSize: 12 }}>
+            {item.role}
           </span>
-        </figcaption>
-      </div>
+        </span>
+      </figcaption>
     </figure>
+  )
+}
+
+function MarqueeRow({ items, direction, duration }) {
+  return (
+    <div className="relative overflow-hidden">
+      <div
+        className={`flex w-max gap-3 sm:gap-4 kd-marquee ${
+          direction === 'ltr' ? 'kd-marquee-ltr' : 'kd-marquee-rtl'
+        }`}
+        style={{ animationDuration: duration }}
+      >
+        {[...items, ...items].map((item, index) => (
+          <TestimonialCard key={`${item.name}-${index}`} item={item} />
+        ))}
+      </div>
+
+      <span
+        className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#ededed] to-transparent"
+        aria-hidden="true"
+      />
+      <span
+        className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#ededed] to-transparent"
+        aria-hidden="true"
+      />
+    </div>
   )
 }
 
 function Testimonials() {
   return (
-    <section
-      id="testimonials"
-      className="px-4 sm:px-6 pb-16 sm:pb-24 max-w-6xl mx-auto"
-    >
-      <div className="text-center">
+    <section id="testimonials" className="pb-16 sm:pb-24">
+      <div className="px-4 sm:px-6 max-w-6xl mx-auto text-center">
         <span
           className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-1.5 shadow-sm text-neutral-900"
           style={{ fontSize: 13 }}
@@ -135,10 +180,9 @@ function Testimonials() {
         </h2>
       </div>
 
-      <div className="mt-10 sm:mt-16 grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 items-start">
-        {TESTIMONIALS.map((item) => (
-          <TestimonialCard key={item.name} item={item} />
-        ))}
+      <div className="mt-10 sm:mt-14 flex flex-col gap-3 sm:gap-4">
+        <MarqueeRow items={ROW_ONE} direction="ltr" duration="55s" />
+        <MarqueeRow items={ROW_TWO} direction="rtl" duration="65s" />
       </div>
     </section>
   )

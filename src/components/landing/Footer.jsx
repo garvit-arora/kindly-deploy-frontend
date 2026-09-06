@@ -3,9 +3,6 @@ import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import GithubMark from '../GithubMark'
 
-const FOOTER_VIDEO =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260424_064411_9e9d7f84-9277-41f4-ab10-59172d89e6be.mp4'
-
 const PETAL_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
 
 function Logo({ className }) {
@@ -75,10 +72,7 @@ function Watermark() {
         return
       }
 
-      svg.setAttribute(
-        'viewBox',
-        `${box.x} ${box.y} ${box.width} ${box.height}`,
-      )
+      svg.setAttribute('viewBox', `${box.x} ${box.y} ${box.width} ${box.height}`)
     }
 
     fit()
@@ -120,25 +114,12 @@ function Watermark() {
 
 function Footer() {
   return (
-    <footer className="px-4 sm:px-6 pb-4">
-      <div className="bg-[#0b0f1a] rounded-3xl p-3 sm:p-4 max-w-6xl mx-auto overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-3 sm:gap-4">
-          <div className="relative rounded-2xl overflow-hidden min-h-[280px] flex flex-col justify-between p-6">
-            <video
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-            >
-              <source src={FOOTER_VIDEO} type="video/mp4" />
-            </video>
-
-            <div className="absolute inset-0 bg-[#0b0f1a]/70" />
-
-            <div className="relative z-10 flex items-center gap-3">
-              <Logo className="w-9 h-9" />
+    <footer className="-mx-3 sm:-mx-4 -mb-3 sm:-mb-4 bg-[#0b0f1a] overflow-hidden">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-14 sm:pt-20">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-12">
+          <div className="max-w-md">
+            <div className="flex items-center gap-3">
+              <Logo className="w-8 h-8" />
               <span
                 className="text-white"
                 style={{ fontSize: 16, fontWeight: 600, letterSpacing: '-0.02em' }}
@@ -147,59 +128,32 @@ function Footer() {
               </span>
             </div>
 
-            <div className="relative z-10">
-              <a
-                href="https://github.com/garvit-arora"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/80 hover:text-white hover:bg-white/20 backdrop-blur-md transition"
-                style={{ fontSize: 13 }}
-              >
-                <GithubMark className="w-4 h-4" />
-                GitHub
-              </a>
-            </div>
-          </div>
-
-          <div className="relative rounded-2xl bg-white p-6 sm:p-10 overflow-hidden">
-            <span
-              className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-[#ef4d23] blur-3xl opacity-[0.13]"
-              aria-hidden="true"
-            />
-
-            <span
-              className="hidden sm:grid absolute top-8 right-8 w-16 h-16 rounded-2xl bg-[#0b0f1a] place-items-center rotate-12 shadow-lg"
-              aria-hidden="true"
+            <h2
+              className="mt-7 text-white"
+              style={{
+                fontSize: 'clamp(26px, 4vw, 40px)',
+                lineHeight: 1.12,
+                fontWeight: 500,
+                letterSpacing: '-0.04em',
+              }}
             >
-              <Logo className="w-8 h-8" />
-            </span>
-
-            <div className="relative z-10">
-              <h2
-                className="text-neutral-900 max-w-md"
+              Ready to ship your{' '}
+              <span
                 style={{
-                  fontSize: 'clamp(24px, 4vw, 36px)',
-                  lineHeight: 1.15,
-                  fontWeight: 500,
-                  letterSpacing: '-0.04em',
+                  fontFamily: "'Instrument Serif', serif",
+                  fontStyle: 'italic',
+                  fontWeight: 400,
                 }}
               >
-                Ready to ship your{' '}
-                <span
-                  style={{
-                    fontFamily: "'Instrument Serif', serif",
-                    fontStyle: 'italic',
-                    fontWeight: 400,
-                  }}
-                >
-                  next
-                </span>{' '}
-                commit?
-              </h2>
+                next
+              </span>{' '}
+              commit?
+            </h2>
 
+            <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link
                 to="/login"
-                className="mt-6 inline-flex items-center gap-3 bg-[#0b0f1a] text-white rounded-full pl-6 pr-2 py-2"
+                className="inline-flex items-center gap-3 bg-[#ef4d23] text-white rounded-full pl-6 pr-2 py-2"
                 style={{ fontSize: 14 }}
               >
                 Start Deploying
@@ -208,61 +162,69 @@ function Footer() {
                 </span>
               </Link>
 
-              <div className="mt-10 pt-8 border-t border-neutral-200 grid grid-cols-2 sm:grid-cols-3 gap-8">
-                {LINK_GROUPS.map((group) => (
-                  <div key={group.title}>
-                    <p
-                      className="text-neutral-900"
-                      style={{ fontSize: 13, fontWeight: 600 }}
-                    >
-                      {group.title}
-                    </p>
-
-                    <ul className="mt-3 flex flex-col gap-2">
-                      {group.links.map((link) => (
-                        <li key={link.label}>
-                          {link.to ? (
-                            <Link
-                              to={link.to}
-                              className="text-neutral-500 hover:text-neutral-900 transition"
-                              style={{ fontSize: 14 }}
-                            >
-                              {link.label}
-                            </Link>
-                          ) : (
-                            <a
-                              href={link.href}
-                              className="text-neutral-500 hover:text-neutral-900 transition"
-                              style={{ fontSize: 14 }}
-                            >
-                              {link.label}
-                            </a>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+              <a
+                href="https://github.com/garvit-arora"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-white/70 hover:text-white hover:border-white/40 transition"
+                style={{ fontSize: 14 }}
+              >
+                <GithubMark className="w-4 h-4" />
+                GitHub
+              </a>
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12 lg:pt-2">
+            {LINK_GROUPS.map((group) => (
+              <div key={group.title}>
+                <p className="text-white" style={{ fontSize: 13, fontWeight: 600 }}>
+                  {group.title}
+                </p>
+
+                <ul className="mt-4 flex flex-col gap-2.5">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      {link.to ? (
+                        <Link
+                          to={link.to}
+                          className="text-white/55 hover:text-white transition"
+                          style={{ fontSize: 14 }}
+                        >
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <a
+                          href={link.href}
+                          className="text-white/55 hover:text-white transition"
+                          style={{ fontSize: 14 }}
+                        >
+                          {link.label}
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="mt-6 px-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-white/50" style={{ fontSize: 13 }}>
+        <div className="mt-14 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-white/45" style={{ fontSize: 13 }}>
             © {new Date().getFullYear()} KindlyDeploy. Built as a learning platform.
           </p>
 
           <a
             href="#top"
-            className="text-white/50 hover:text-white transition"
+            className="text-white/45 hover:text-white transition"
             style={{ fontSize: 13 }}
           >
             Back to top
           </a>
         </div>
 
-        <div className="mt-2 -mb-2">
+        <div className="mt-8 -mb-[3%]">
           <Watermark />
         </div>
       </div>

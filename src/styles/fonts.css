@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
-@keyframes kd-orbit-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes kd-pulse-dot {
   0%,
   100% {
@@ -16,30 +10,49 @@
   }
 }
 
-.kd-orbit {
-  animation: kd-orbit-spin 26s linear infinite;
+@keyframes kd-marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes kd-marquee-ltr {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 .kd-pulse {
   animation: kd-pulse-dot 1.8s ease-in-out infinite;
 }
 
-.kd-step-surface {
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+.kd-marquee {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
 }
 
-.kd-step:hover .kd-step-surface {
-  transform: scale(1.06);
-  filter: saturate(1.25);
+.kd-marquee-rtl {
+  animation-name: kd-marquee-rtl;
+}
+
+.kd-marquee-ltr {
+  animation-name: kd-marquee-ltr;
+}
+
+.kd-marquee:hover {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kd-orbit,
-  .kd-pulse {
+  .kd-pulse,
+  .kd-marquee {
     animation: none;
-  }
-
-  .kd-step:hover .kd-step-surface {
-    transform: none;
   }
 }
